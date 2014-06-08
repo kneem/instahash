@@ -1,23 +1,21 @@
 # Instahash (beta)
----
+
 Instahash is a fully JavaScript-based application used to fetch and display
 photos on Instagram from a user-specified hashtag:
 
 ![Instahash Screenshot](screenshots/instahash.png?raw=true "Instahash main page")
 
+## Setup
 1. You'll need to [create a client application
 on Instagram](http://instagram.com/developer/register/) in order to get this
 working, and in the [Manage Clients](http://instagram.com/developer/clients/manage/)
 page, the `WEBSITE URL` and `REDIRECT URI` need to point to the `/login` page.
-For example:
-```
-http://localhost:3000/login
-```
+For example: `http://localhost:3000/login`.
 
 2. Run `npm install` to install all the node dependencies.
 
-3. Then, you'll need to specify your client ID from your Instagram developer page
-in `app/js/app.js` and you're all set:
+3. Then, you'll need to specify your client ID from step 1 in `app/js/app.js`
+and you're all set:
 ```javascript
 app.constant('clientId', 'YOUR_CLIENT_ID');
 ```
