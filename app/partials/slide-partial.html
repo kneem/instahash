@@ -25,33 +25,37 @@ limitations under the License.
         </button>
     </div>
     <h1>Instahash! <small><span class="label label-info">v 0.0.1</span></small></h1>
-    <div class="input-group">
-        <span class="input-group-addon">#</span>
-        <input type="text" class="form-control" placeholder="Search by hashtag…" ng-model="hashTag" ng-keyup="checkKey()">
-        <span class="input-group-btn">
-            <button class="btn btn-primary" type="button" ng-click="getSlides()">Search</button>
-        </span>
-    </div>
-    <div class="well hash-results">
-        <div class="row">
-            <div class="col-md-3" ng-repeat="slide in slides | orderBy: 'timestamp': true">
-                <div class="thumbnail">
-                    <a href="{{slide.link}}" target="_blank">
-                        <img ng-src="{{slide.img}}" />
-                    </a>
-                    <div class="caption">
-                        <h4>
-                            <a href="http://instagram.com/{{slide.username}}" target="_blank">@{{slide.username}}</a>
-                        </h4>
-                        <i class="fa fa-heart"></i> {{slide.likes.count}}
-                        <p>{{slide.text}}</p>
-                        <p class="text-right"><small>{{slide.timestamp * 1000 | date:'medium'}}</small></p>
+    <form name="form" class="hashtag-form" ng-submit="submitForm(form)" novalidate>
+        <div class="input-group">
+            <span class="input-group-addon">#</span>
+            <input type="text" name="hash" class="form-control" placeholder="Search by hashtag…" ng-model="hashTag" required ng-pattern="/^(\w+)$/">
+            <span class="input-group-btn">
+                <button class="btn btn-primary" type="button" ng-click="submitForm(form)">Search</button>
+            </span>
+        </div>
+    </form>
+    <div class="well hash-results" ng-hide="rows === undefined">
+        <div ng-repeat="row in rows">
+            <div class="row">
+                <div class="col-md-3" ng-repeat="slide in row">
+                    <div class="thumbnail">
+                        <a href="{{slide.link}}" target="_blank">
+                            <img ng-src="{{slide.img}}" />
+                        </a>
+                        <div class="caption">
+                            <h4>
+                                <a href="http://instagram.com/{{slide.username}}" target="_blank">@{{slide.username}}</a>
+                            </h4>
+                            <i class="fa fa-heart"></i> {{slide.likes.count}}
+                            <p>{{slide.text}}</p>
+                            <p class="text-right"><small>{{slide.timestamp * 1000 | date:'medium'}}</small></p>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div ng-hide="slides.length">
-                <p class="text-center">No results found.</p>
-            </div>
+        </div>
+        <div ng-show="rows.length === 0">
+            <p class="text-center">No results found.</p>
         </div>
     </div>
 </div>

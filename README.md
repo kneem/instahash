@@ -16,11 +16,11 @@ For example: `http://localhost:3000/login`.
 
 3. Then, you'll need to specify your client ID from step 1 in `app/js/app.js`
 and you're all set:
-```javascript
+```js
 app.constant('clientId', 'YOUR_CLIENT_ID');
 ```
 
-[Instahash.me](http://instahash.me) is under construction and will be based off
+[Instahash.com](http://instahash.com) is under construction and will be based off
 of this application. Stay tuned!
 
 ## Technologies
@@ -37,6 +37,5 @@ of this application. Stay tuned!
 * Better error page.
 * Better styling:
   * Use Less.js.
-  * Fix the Bootstrap grid layout.
 * Add support for [real-time subscriptions](http://instagram.com/developer/realtime/).
 * Add support for [Famous](http://famo.us/).

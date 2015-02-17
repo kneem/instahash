@@ -80,15 +80,35 @@ app.controller('SlideController', ['$scope', '$http', '$location', '$log', 'clie
             return data;
         };
 
-        $scope.slides = [];
-        $scope.getSlides = function() {
-            // TODO: escape/sanitize the hashtag.
-            if (!$scope.hashTag) {
-                // Don't query unless we have something to search for.
-                // TODO: Show a bootstrap alert here instead.
-                alert('Please enter a hashtag');
+        var parseDataForGrids = function(data) {
+            var chunkSize = 4;
+            var result = [];
+
+            for (var i = 0; i < data.length; i += chunkSize) {
+                result.push(data.slice(i, i + chunkSize));
+            }
+
+            return result;
+        };
+
+        $scope.submitForm = function(form) {
+            if (form.$valid) {
+                $scope.getSlides();
                 return;
             }
+
+            if (form.$error.required) {
+                alert('Please enter a hashtag.');
+                return;
+            }
+
+            if (form.$error.pattern) {
+                alert('The hashtag you entered is invalid (only alphanumeric characters are allowed). Please enter a valid hashtag.');
+                return;
+            }
+        };
+
+        $scope.getSlides = function() {
             // TODO: might have to change from client_id to access_token.
             $http.jsonp('https://api.instagram.com/v1/tags/' + $scope.hashTag +
                 '/media/recent?client_id=' + clientId + '&callback=JSON_CALLBACK')
@@ -99,7 +119,8 @@ app.controller('SlideController', ['$scope', '$http', '$location', '$log', 'clie
                     baseUrl = $location.absUrl();
                 // TODO: Separate model code from controller code.
                 $scope.slides = data || [];
-                return $scope.slides;
+                $scope.rows = parseDataForGrids(data);
+                return $scope.rows;
             })
             .error(function(response) {
                 $log.error('Error fetching tags: ' + response);
@@ -121,22 +142,15 @@ app.controller('SlideController', ['$scope', '$http', '$location', '$log', 'clie
                     }
                     var data = filterData(response.data);
                     if (!_.isEmpty(data)) {
-                        _.each(data, function(data) {
-                            $scope.slides.push(data);
-                        });
+                        $scope.slides = data.concat($scope.slides);
+                        var newRows = parseDataForGrids($scope.slides);
+                        $scope.rows = newRows;
                     }
                 })
                 .error(function(err) {
                     $log.error('Failed to retrieve new images: ' + err);
                 });
         },
-
-        $scope.checkKey = function() {
-            if (event.keyCode === 13) {
-                // Enter key was pressed.
-                $scope.getSlides();
-            }
-        };
 
         $scope.logout = function() {
             localStorage.removeItem('instahash_token');
